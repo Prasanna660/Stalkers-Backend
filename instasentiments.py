@@ -35,7 +35,7 @@ def getPrivateProfileCaptions(profile_id, login, password):
     try:
         loader.login(login, password)
     except:
-        return "Failed to login!", "Empty", "Empty"
+        return "Failed to login!", "Empty", "Empty", None
 
     profile = Profile.from_username(loader.context, profile_id)
     posts = profile.get_posts()
@@ -55,7 +55,7 @@ def getPrivateProfileCaptions(profile_id, login, password):
     loader.close()
     
     if len(captions) < 1:
-        return "No captions found! Are you sure this profile has posted?", "Empty", "Empty"
+        return "No captions found! Are you sure this profile has posted?", "Empty", "Empty", None
     else:
         captions_or_comments = captions
         return captions_or_comments, profile_pic, full_name, posts_data
