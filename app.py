@@ -32,7 +32,6 @@ def receiveSendJSON():
         return "<h1 style='color:red'> GET requests are not allowed, send some JSON data to this URL. </h1>"
     
     data = request.json
-
     response_data = {}
 
     if data['type'] == 'Public':
@@ -45,11 +44,18 @@ def receiveSendJSON():
         password = data['password']
     
         captions, profile_pic_url, full_name, captions_posts_data = getPrivateProfileCaptions(login_id, login_username, password)
+        
+        # Check if the function call was successful
+        if captions_posts_data is None:
+            return jsonify({
+                'Type': 'Fail',
+                'Value': 'Failed to fetch private profile data. Please check the credentials and try again.'
+            })
+        
         comments, _, _, comments_posts_data = getPrivateProfileCommentsSentiments(login_id, login_username, password)
         
-        # Combine post data from captions and comments
+        # Proceed if comments data also fetched successfully; otherwise, it's handled similarly as above
         posts_data = captions_posts_data + comments_posts_data
-    
         result = captions + comments  # Combine captions and comments
 
     if isinstance(result, str):
